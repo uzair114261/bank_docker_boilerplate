@@ -1,0 +1,13 @@
+from django.db import models
+
+from bank_management_system.authentication.models import User
+from bank_management_system.banks.models import Bank
+
+
+class Account(models.Model):
+    bank = models.ForeignKey(Bank, on_delete=models.CASCADE, related_name="bank_account")
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="user_account")
+    balance = models.PositiveIntegerField()
+
+    def __str__(self):
+        return f"{self.bank} for {self.user}"
