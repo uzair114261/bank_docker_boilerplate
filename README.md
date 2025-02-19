@@ -1,14 +1,4 @@
-# Project Boilerplate
-
-## Required Changes
-
-- `docker-compose.*.yml`: change `project_name` with actual project name.
-- `project/`: change `project_name` with actual project name.
-- `project/celery.py`: change `project_name` with actual project name.
-- `config/settings/base.py`: change `project_name` with actual project name.
-- `Makefile`: change `project_name` with actual project name.
-- `config/settings/constance.py`: change `project_name` with actual project name.
-- Search for `project_name` elsewhere in project and change with actual project name.
+# Project Boilerplate for bank_management_system
 
 ## Project First Time Setup
 

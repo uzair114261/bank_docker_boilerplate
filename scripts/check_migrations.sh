@@ -1,6 +1,6 @@
 #!/bin/bash
 
-CONTAINER_NAME="project_name-dc01"
+CONTAINER_NAME="bank_management_system-dc01"
 
 # Check if the Django container is running
 if docker ps --filter "name=${CONTAINER_NAME}" --filter "status=running" | grep -q "${CONTAINER_NAME}"; then
