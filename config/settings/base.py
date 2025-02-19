@@ -47,12 +47,16 @@ THIRD_PARTY_APPS = [
 ]
 
 CUSTOM_APPS = [
+    "bank_management_system.banks",
+    "bank_management_system.accounts",
+    "bank_management_system.authentication",
 ]
 
 INSTALLED_APPS = DEFAULT_APPS + THIRD_PARTY_APPS + CUSTOM_APPS
 
 
 MIDDLEWARE = [
+    "bank_management_system.middleware.maintenance.MaintenanceModeMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "corsheaders.middleware.CorsMiddleware",
@@ -198,7 +202,10 @@ REST_FRAMEWORK = {
     "DEFAULT_FILTER_BACKENDS": [
         "django_filters.rest_framework.DjangoFilterBackend",
     ],
+    "DEFAULT_PAGINATION_CLASS": "bank_management_system.banks.api.pagination.CustomPageNumberPagination",
+    "PAGE_SIZE": 10,
 }
+AUTH_USER_MODEL = "authentication.User"
 FRONTEND_URL = get_env_variable("FRONTEND_URL")
 
 LOGGING = {

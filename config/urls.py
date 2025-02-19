@@ -21,7 +21,14 @@ schema_view = get_schema_view(
 
 urlpatterns = [
     path("swagger/", schema_view.with_ui("swagger", cache_timeout=0), name="swagger"),
-    path("admin/", admin.site.urls)
+    path("admin/", admin.site.urls),
+    path("banks/", include("bank_management_system.banks.urls")),
+    path("accounts/", include("bank_management_system.accounts.urls")),
+    path("authentication/", include("bank_management_system.authentication.urls")),
+    # Base routes for APIs
+    path("api/banks/", include("bank_management_system.banks.api.urls")),
+    path("api/authentication/", include("bank_management_system.authentication.api.urls")),
+    path("api/accounts/", include("bank_management_system.accounts.api.urls")),
 ]
 
 if settings.ENABLE_DEBUG_TOOLS:
