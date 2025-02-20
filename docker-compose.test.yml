@@ -1,0 +1,87 @@
+x-common: &common
+  stdin_open: true
+  tty: true
+  restart: unless-stopped
+  networks:
+    - bank_management_system
+
+x-django-build: &django-build
+  build:
+    context: .
+    dockerfile: ./Dockerfile.dev
+
+services:
+  django:
+    <<: *django-build
+    container_name: bank_management_system-dc01
+    ports:
+      - "8000:8000"
+    env_file:
+      - .env.test
+    volumes:
+      - ./:/code
+      - bank_management_system_static_volume:/code/static
+      - bank_management_system_media_volume:/code/media
+    depends_on:
+      - postgres
+      - redis
+    <<: *common
+
+  postgres:
+    image: postgres:13.3-alpine
+    container_name: bank_management_system-pc01
+    env_file:
+      - .env.test
+    ports:
+      - "5432:5432"
+    volumes:
+      - bank_management_system_postgres_data:/var/lib/postgresql/data/
+    <<: *common
+
+  redis:
+    image: redis:6.2-alpine
+    container_name: bank_management_system-rc01
+    volumes:
+      - bank_management_system_redis_data:/data
+    <<: *common
+
+  celery:
+    build:
+      context: .
+      dockerfile: ./Dockerfile.dev
+    container_name: bank_management_system-cc01
+    command: bash -c "celery -A bank_management_system worker -l info"
+    depends_on:
+      - django
+      - redis
+    env_file:
+      - .env.test
+    volumes:
+      - .:/code/
+    <<: *common
+
+  celery-beat:
+    build:
+      context: .
+      dockerfile: ./Dockerfile.dev
+    container_name: bank_management_system-cb01
+    command: bash -c "celery -A bank_management_system worker -l info --beat --scheduler django_celery_beat.schedulers:DatabaseScheduler"
+    depends_on:
+      - django
+      - redis
+    env_file:
+      - .env.test
+    volumes:
+      - .:/code/
+      - bank_management_system_media_volume:/code/media
+    <<: *common
+
+networks:
+  bank_management_system:
+    driver: bridge
+
+volumes:
+  bank_management_system_postgres_data:
+  bank_management_system_redis_data:
+  bank_management_system_static_volume:
+  bank_management_system_media_volume:

@@ -1,0 +1,9 @@
+services:
+  cr:
+    build:
+      context: .
+      dockerfile: ./Dockerfile.cr
+    container_name: bank_management_system-cr01
+    command: bash -c "/code/scripts/cr.sh"
+    volumes:
+      - ./:/code
